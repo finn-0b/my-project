@@ -15,11 +15,22 @@ RUN apk add --no-cache \
 
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install --legacy-peer-deps
+
+# Install sharp for ARM64
+RUN npm install --platform=linuxmusl --arch=arm64 sharp
+
+# Copy .env file (only needs PAYLOAD_SECRET for build)
+COPY .env* ./
 
 COPY . .
 
-# Build the application
+# Remove lockfile to avoid Next.js patching issues on ARM64
+RUN rm -f package-lock.json
+
+# Build using experimental compile mode (no DB needed)
+ENV NODE_ENV=production
 RUN npm run build
 
 # Production stage
@@ -35,17 +46,16 @@ RUN apk add --no-cache \
     giflib \
     pixman
 
-# Copy package files
-COPY package*.json ./
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# Install production dependencies only
-RUN npm install --production --legacy-peer-deps
-
-# Copy built application from builder
-COPY --from=builder /home/node/app/.next ./.next
+# Copy standalone output
+COPY --from=builder /home/node/app/.next/standalone ./
+COPY --from=builder /home/node/app/.next/static ./.next/static
 COPY --from=builder /home/node/app/public ./public
-COPY --from=builder /home/node/app/next.config.js ./next.config.js
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+# Run the server
+CMD ["node", "server.js"]

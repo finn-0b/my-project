@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "strict": true,
-    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "esModuleInterop": true,
     "target": "ES2022",
@@ -34,7 +33,7 @@
       ],
       "@/*": [
         "./src/*"
-      ],
+      ]
     }
   },
   "include": [
@@ -49,4 +48,9 @@
   "exclude": [
     "node_modules"
   ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

@@ -4,14 +4,14 @@ import redirects from './redirects.js'
 
 const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : undefined || process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
+  : process.env.__NEXT_PRIVATE_ORIGIN || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',  // ← Add this line for production builds
+  output: 'standalone',
   images: {
     remotePatterns: [
-      ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
+      ...[NEXT_PUBLIC_SERVER_URL].map((item) => {
         const url = new URL(item)
         return {
           hostname: url.hostname,
@@ -30,6 +30,29 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  experimental: {
+    forceSwcTransforms: false,
+  },
+  // Disable type checking during build to avoid the deprecation error
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 }
 
-export default withPayload(nextConfig, { devBundleServerPackages: false })
+// Wrap with Payload and filter out invalid keys
+const config = withPayload(nextConfig, {
+  devBundleServerPackages: false,
+})
+
+// Remove invalid keys that withPayload might add
+const invalidKeys = ['outputFileTracingExcludes', 'outputFileTracingIncludes', 'turbopack', 'serverExternalPackages']
+invalidKeys.forEach(key => {
+  if (config[key]) {
+    delete config[key]
+  }
+})
+
+export default config

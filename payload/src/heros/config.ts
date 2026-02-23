@@ -39,6 +39,13 @@ export const hero: Field = {
       required: true,
     },
     {
+      name: 'eyebrow',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+      },
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({
@@ -66,6 +73,25 @@ export const hero: Field = {
       },
       relationTo: 'media',
       required: true,
+    },
+    {
+      name: 'showScrollIndicator',
+      type: 'checkbox',
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact'].includes(type),
+      },
+      defaultValue: true,
+      label: 'Show Scroll Indicator',
+    },
+    {
+      name: 'scrollIndicatorLabel',
+      type: 'text',
+      admin: {
+        condition: (_, { type, showScrollIndicator } = {}) =>
+          ['highImpact'].includes(type) && showScrollIndicator,
+      },
+      defaultValue: 'Discover',
+      label: 'Scroll Indicator Label',
     },
   ],
   label: false,

@@ -75,6 +75,24 @@ export const hero: Field = {
       required: true,
     },
     {
+      name: 'style',
+      type: 'select',
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+      },
+      defaultValue: 'default',
+      options: [
+        {
+          label: 'Default (White)',
+          value: 'default',
+        },
+        {
+          label: 'Brand Gold',
+          value: 'gold',
+        },
+      ],
+    },
+    {
       name: 'showScrollIndicator',
       type: 'checkbox',
       admin: {

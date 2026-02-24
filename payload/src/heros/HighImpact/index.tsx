@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect } from 'react'
@@ -9,6 +9,7 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { cn } from '@/utilities/ui'
 
 export const HighImpactHero: React.FC<Page['hero']> = ({
   eyebrow,
@@ -17,6 +18,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
   richText,
   scrollIndicatorLabel,
   showScrollIndicator,
+  style,
 }) => {
   const { setHeaderTheme } = useHeaderTheme()
 
@@ -36,7 +38,12 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 mx-auto max-w-5xl px-6 text-center text-white">
+      <div
+        className={cn(
+          'relative z-10 mx-auto max-w-5xl px-6 text-center text-white',
+          style === 'gold' && 'text-gold',
+        )}
+      >
         {/* Eyebrow */}
         {eyebrow && (
           <div className="mb-8 flex items-center justify-center gap-4">

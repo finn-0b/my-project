@@ -200,6 +200,7 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    style?: ('default' | 'gold') | null;
     showScrollIndicator?: boolean | null;
     scrollIndicatorLabel?: string | null;
   };
@@ -1082,6 +1083,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        style?: T;
         showScrollIndicator?: T;
         scrollIndicatorLabel?: T;
       };

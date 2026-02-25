@@ -54,6 +54,7 @@ ENV HOSTNAME="0.0.0.0"
 COPY --from=builder /home/node/app/.next/standalone ./
 COPY --from=builder /home/node/app/.next/static ./.next/static
 COPY --from=builder /home/node/app/public ./public
+COPY --from=builder /home/node/app/package.json ./package.json
 
 EXPOSE 3000
 

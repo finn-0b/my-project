@@ -35,27 +35,25 @@ RUN npm run build
 
 # Production stage
 FROM node:20-alpine
-
 WORKDIR /home/node/app
 
-# Install runtime dependencies for sharp
-RUN apk add --no-cache \
-    cairo \
-    jpeg \
-    pango \
-    giflib \
-    pixman
+RUN apk add --no-cache cairo jpeg pango giflib pixman
 
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Copy standalone output
+# 1. Copy standalone output
 COPY --from=builder /home/node/app/.next/standalone ./
 COPY --from=builder /home/node/app/.next/static ./.next/static
 COPY --from=builder /home/node/app/public ./public
 
+# 2. ADD THESE: Copy migration files and config needed for the CLI
+COPY --from=builder /home/node/app/src/migrations ./src/migrations
+COPY --from=builder /home/node/app/payload.config.ts ./payload.config.ts
+
 EXPOSE 3000
 
-# Run the server
-CMD ["node", "server.js"]
+# 3. Use the internal node_modules path for the migration
+# In standalone mode, node_modules is inside the current directory
+CMD ["sh", "-c", "node node_modules/payload/dist/bin/index.js migrations:migrate && node server.js"]

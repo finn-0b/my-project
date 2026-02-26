@@ -21,7 +21,7 @@ services:
   payload:
     image: ghcr.io/finn-0b/payload:latest
     restart: always
-    command: sh -c "npx payload migrations:migrate && node dist/server.js"
+    command: sh -c "node payload/node_modules/payload/dist/bin/index.js migrations:migrate && node payload/server.js"
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_payload:5432/${POSTGRES_DB}

@@ -44,17 +44,17 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # 1. Copy standalone output
-COPY --from=builder /home/node/app/.next/standalone ./
-COPY --from=builder /home/node/app/.next/static ./.next/static
-COPY --from=builder /home/node/app/public ./public
-COPY --from=builder /home/node/app/package.json ./package.json
+COPY --from=builder /home/node/app/.next/standalone ./payload/
+COPY --from=builder /home/node/app/.next/static ./payload/.next/static
+COPY --from=builder /home/node/app/public ./payload/public
+COPY --from=builder /home/node/app/package.json ./payload/package.json
 
 # 2. ADD THESE: Copy migration files and config needed for the CLI
-COPY --from=builder /home/node/app/src/migrations ./src/migrations
-COPY --from=builder /home/node/app/payload.config.ts ./payload.config.ts
+COPY --from=builder /home/node/app/src/migrations ./payload/src/migrations
+COPY --from=builder /home/node/app/payload.config.ts ./payload/payload.config.ts
 
 EXPOSE 3000
 
 # 3. Use the internal node_modules path for the migration
 # In standalone mode, node_modules is inside the current directory
-CMD ["sh", "-c", "node node_modules/payload/dist/bin/index.js migrations:migrate && node server.js"]
+CMD ["sh", "-c", "node payload/node_modules/payload/dist/bin/index.js migrations:migrate && node server.js"]

@@ -13,13 +13,15 @@ services:
     networks:
       - payload_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U finn -d payload"] # ← Add -d payload      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
       timeout: 5s
       retries: 5
 
   payload:
     image: ghcr.io/finn-0b/payload:latest
     restart: always
+    command: sh -c "npx payload migrations:migrate && node dist/server.js"
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_payload:5432/${POSTGRES_DB}

@@ -51,7 +51,7 @@ COPY --from=builder /home/node/app/package.json ./payload/package.json
 
 # 2. ADD THESE: Copy migration files and config needed for the CLI
 COPY --from=builder /home/node/app/src/migrations ./payload/src/migrations
-COPY --from=builder /home/node/app/payload.config.ts ./payload/payload.config.ts
+COPY --from=builder /home/node/app/src/payload.config.ts ./payload/src/payload.config.ts
 
 EXPOSE 3000
 

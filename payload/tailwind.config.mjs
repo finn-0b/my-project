@@ -71,6 +71,7 @@ const config = {
           foreground: 'hsl(var(--destructive-foreground))',
         },
         foreground: 'hsl(var(--foreground))',
+        gold: '#C5A059',
         input: 'hsl(var(--input))',
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -95,7 +96,8 @@ const config = {
       },
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
-        sans: ['var(--font-geist-sans)'],
+        sans: ['var(--font-inter)'],
+        serif: ['var(--font-playfair)'],
       },
       keyframes: {
         'accordion-down': {

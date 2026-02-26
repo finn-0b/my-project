@@ -159,6 +159,7 @@ export interface Page {
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    eyebrow?: string | null;
     richText?: {
       root: {
         type: string;
@@ -199,6 +200,9 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    style?: ('default' | 'gold') | null;
+    showScrollIndicator?: boolean | null;
+    scrollIndicatorLabel?: string | null;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
@@ -1061,6 +1065,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        eyebrow?: T;
         richText?: T;
         links?:
           | T
@@ -1078,6 +1083,9 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        style?: T;
+        showScrollIndicator?: T;
+        scrollIndicatorLabel?: T;
       };
   layout?:
     | T
@@ -1635,6 +1643,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  logo?: {
+    text?: string | null;
+  };
   navItems?:
     | {
         link: {
@@ -1655,6 +1666,27 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  cta: {
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1692,6 +1724,11 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?:
+    | T
+    | {
+        text?: T;
+      };
   navItems?:
     | T
     | {
@@ -1705,6 +1742,20 @@ export interface HeaderSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  cta?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

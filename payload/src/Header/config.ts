@@ -10,6 +10,18 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logo',
+      type: 'group',
+      fields: [
+        {
+          name: 'text',
+          type: 'text',
+          label: 'Logo Text',
+          defaultValue: 'Sterling & Associates',
+        },
+      ],
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [
@@ -24,6 +36,15 @@ export const Header: GlobalConfig = {
           RowLabel: '@/Header/RowLabel#RowLabel',
         },
       },
+    },
+    {
+      name: 'cta',
+      type: 'group',
+      fields: [
+        link({
+          appearances: ['default', 'outline'],
+        }),
+      ],
     },
   ],
   hooks: {

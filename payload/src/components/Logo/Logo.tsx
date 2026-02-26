@@ -5,25 +5,22 @@ interface Props {
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
+  text?: string | null
 }
 
 export const Logo = (props: Props) => {
-  const { loading: loadingFromProps, priority: priorityFromProps, className } = props
-
-  const loading = loadingFromProps || 'lazy'
-  const priority = priorityFromProps || 'low'
+  const { className, text } = props
 
   return (
-    /* eslint-disable @next/next/no-img-element */
-    <img
-      alt="Payload Logo"
-      width={193}
-      height={34}
-      loading={loading}
-      fetchPriority={priority}
-      decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-logo-light.svg"
-    />
+    <div className={clsx('flex items-center gap-3 group', className)}>
+      <div className="flex items-center gap-0.5">
+        <div className="h-5 w-[2px] bg-gold" />
+        <div className="h-7 w-[2px] bg-gold" />
+        <div className="h-5 w-[2px] bg-gold" />
+      </div>
+      <span className="font-serif text-lg tracking-wide text-foreground">
+        {text || 'Sterling & Associates'}
+      </span>
+    </div>
   )
 }

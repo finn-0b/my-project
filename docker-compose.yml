@@ -4,6 +4,8 @@ services:
   postgres_payload:
     image: postgres:16-alpine
     restart: always
+    ports:
+      - "5432:5432"  # This allows host access via localhost:5432
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -13,7 +15,7 @@ services:
     networks:
       - payload_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,7 +26,7 @@ services:
     command: sh -c "node payload/node_modules/payload/dist/bin/index.js migrations:migrate && node payload/server.js"
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_payload:5432/${POSTGRES_DB}
+      DATABASE_URL: ${DATABASE_URL}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
       NEXT_PUBLIC_SERVER_URL: https://${DOMAIN_NAME}
       PREVIEW_SECRET: ${PREVIEW_SECRET}

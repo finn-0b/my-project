@@ -16,14 +16,12 @@ services:
       - payload_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
       timeout: 5s
       retries: 5
 
   payload:
     image: ghcr.io/finn-0b/payload:latest
     restart: always
-    command: sh -c "node payload/node_modules/payload/dist/bin/index.js migrations:migrate && node payload/server.js"
     environment:
       NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}

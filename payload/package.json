@@ -18,9 +18,9 @@
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test --config=playwright.config.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "migrate": "npm run payload migrations:migrate",
-    "migrate:create": "npm run payload migrations:create",
-    "migrate:status": "npm run payload migrations:status"
+    "migrate": "npm run payload migrate",
+    "migrate:create": "npm run payload migrate:create",
+    "migrate:status": "npm run payload migrate:status"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.72.0",

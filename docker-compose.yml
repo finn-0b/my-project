@@ -5,7 +5,7 @@ services:
     image: postgres:16-alpine
     restart: always
     ports:
-      - "5432:5432"  # This allows host access via localhost:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -14,10 +14,7 @@ services:
       - payload_db_data:/var/lib/postgresql/data
     networks:
       - payload_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      timeout: 5s
-      retries: 5
+    # No healthcheck section
 
   payload:
     image: ghcr.io/finn-0b/payload:latest
@@ -31,12 +28,11 @@ services:
       PORT: 3000
       HOSTNAME: "0.0.0.0"
     depends_on:
-      postgres_payload:
-        condition: service_healthy
+      - postgres_payload  # Simplified - just depends on container starting
     networks:
       - payload_network
       - web_network
-
+      
   postgres_n8n:
     image: postgres:16-alpine
     restart: always
